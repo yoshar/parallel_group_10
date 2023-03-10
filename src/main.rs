@@ -7,7 +7,7 @@ fn main() {
     let fork_state = Arc::new(Mutex::new(vec![false; num_philosopher])); //makes a boolean list of size of num_philosopher and all values will be false
 
     for index in 0..5{
-        let fork_state = Arc::clone(&fork_state); ///reference to fork_state to use in threads
+        let fork_state = Arc::clone(&fork_state); //reference to fork_state to use in threads
         let h = thread::spawn(move||{
             let mut fork_state = fork_state.lock().unwrap(); //locking variables so they are used in each thread respectively
             //println!("thread {}", index);
