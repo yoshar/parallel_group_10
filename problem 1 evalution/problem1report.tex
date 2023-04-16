@@ -1,0 +1,84 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+		T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+	
+	\title{COP4520 Project Rough Draft\\
+		{}
+		\thanks{}
+	}
+	
+	\author{\IEEEauthorblockN{Carlos Sanchez Ruiz}
+		
+		\and
+		\IEEEauthorblockN{Yosha Riley}
+		\and
+		\IEEEauthorblockN{Kariel Sanchez Ruiz}
+		\and
+		\IEEEauthorblockN{Andrew Ballen}
+	}
+	
+	\maketitle
+	
+	\begin{abstract}
+		The dining philosopher’s problem is a well explored riddle that is often used to represent and teach a deadlocking problem in parallel computing. While the simple and solved nature of this problem would normally not be rigorous enough for a project like this, we are using it to aid us in learning more about an unfamiliar programming language for us, Rust. The problem goes like this: Five philosophers sit at a dining table, there are the same amount of forks placed between them. The philosophers can do two actions eat or think. They need to pick up the two forks around them to eat, then when they are done eating they will replace the forks and go back to thinking. The philosophers represent threads and the forks represent locks. Our objective is to develop an algorithm that efficiently allows the philosophers to eat and think without causing any deadlocks.
+	\end{abstract}
+	
+	%\begin{IEEEkeywords}
+	%	component, formatting, style, styling, insert
+	%\end{IEEEkeywords}
+	
+	\section{Introduction}
+	What we hope to gain from our project is to use concepts we learned in class which involve concurrent objects, mutual exclusion and learn the language Rust. Rust is a coding language ( a systems programming language) that was designed to be safe, fast and allow for concurrency.  It has a user-friendly compiler that with it brings integrated package managers and also prevents crashes in the code. To put it in simpler terms it wont allow the code to run if it sees that it will cause a crash instead it will show in the compiler to the user what changes to make to prevent a crash and allow the code to run.
+	\linebreak
+	\linebreak
+	Advantages of using Rust
+	\begin{enumerate}
+		\item Allows for easy and quick debugging as the compiler helps solve common concurrency issues.
+		\item Compared to Java it is much faster, and C++ it is as fast or faster.
+		\item It is safer than C++ and Java, the language will not compile unsafe code.
+	\end{enumerate}
+	Disadvantages of using Rust
+	\begin{enumerate}
+		\item Rust is more complicated than other languages to learn
+		\item Due to the learning curve it may take longer to solve a problem in Rust
+		\item Rust is less commonly used, so there are less online resources to it
+	\end{enumerate}
+	Overall, Rust is good at solving concurrency problems which is why we chose to do the Dining philosophers problem for our project as it is a complex concurrency problem. The Dining Philosophers problem states that there are N number of philosophers/threads around a table that have an infinite appetite and will never be full. They all have a fork to their left and to their right and must have both picked up to be able to eat. They can either think or eat, and they must not starve which is represented by reaching a deadlock.
+	\linebreak
+	\linebreak
+	Common issues of the problem
+	\begin{enumerate}
+		\item Two philosophers pick up the same fork
+		\item One philosopher picks up a fork and another one picks up the only other available fork meaning the philosopher starves (causes a deadlock).
+	\end{enumerate}
+	To solve these common issues, we will have to use locks to make sure once a thread uses a fork another one cannot which in theory should solve issue number 1. To solve issue number 2, we will have to design our code so that the other fork available to a philosopher once they pick one up is inaccessible. This will require for the variable storing forks to be accessible by all threads.
+	\linebreak
+	\linebreak
+	How using Rust positively affects this problem
+	\begin{enumerate}
+		\item We can share data between the threads using Arc and mutex
+		\begin{enumerate}
+			
+			\item This will let us tell a philosopher if a fork is available for them or not
+		\end{enumerate}
+		\item We can spawn child threads in Rust which can make on thread relate to another
+		\item Rust can lock data meaning that once a thread/philosopher picks up a fork we can lock it until the philosopher drops the fork which then will make it accessible to other threads.
+	\end{enumerate}
+	\section{Goal}
+	In our solution, we would prefer to make an algorithm that requires minimal locking. There is a fairly simple solution we could use, where each philosopher in turn is the only one able to eat, and thus guarantees their access to the forks, but this solution allows much less work to be performed over all. It would be best if our solution allowed multiple philosophers to eat at the same time. To accomplish this, we are considering the use of semaphores. In our case, we are considering having an array that represents how many forks are available for each philosopher at any given time. when a philosopher "picks up" their forks, they update the the available forks values for the philosophers to the left and right, and the same goes for when they place their fork down. This will keep philosophers from attempting to pick up forks when the fork is not available. 
+	\linebreak
+	\linebreak
+	Rust is becoming a more common programming language for systems programming and parallel computing tasks. There are several features of the language that make it a natural choice for these problems and elevate it above the closest competition; C++ and Java. Rust offers a pseudo garbage collector which makes it feel like Java or any other garbage collected language to the user, but has the consistency and memory safety that comes with advanced manual memory management that you would find in C or C++. Rust has a large set of tools which helps with parallel and concurrent programs that the creators have dubbed "fearless concurrency". This is built up by the strictness type of the type system and using an ownership system over raw pointers. The ownership system allows for sharing memory and variables in a more nuanced way than with only pointers. The ownership rules force us to move around or clone values rather than just referencing them, not only does this allow for the rusts memory management system to exist, but it also saves us the headache of dealing with multiple threads having the same pointer, as its just not possible in Rust. The other part large part in Rust's tool kit is the compiler itself. The compiler will not compile unsafe code or code with common concurrency bugs, it will instead fail and then tell you what is wrong with the code. Rust's compiler has much more advanced error reporting most programming languages and is does a unique thing where it is actually helpful. We decided to use this language to take advantage of the many features it has while exploring the dining philosopher's problem and hopefully have consistent solution using Rust.
+	\pagebreak
+
+	
+\end{document}
